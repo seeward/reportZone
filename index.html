@@ -1,0 +1,200 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+
+<script  type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.7.12/xlsx.full.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.1/cerulean/bootstrap.min.css">
+<script type="text/javascript" src="js/jq.js"></script>
+<script type="text/javascript" src="js/bs.js"></script>
+<script type="text/javascript" src="js/jqr.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.js"></script>
+<script src="//www.parsecdn.com/js/parse-1.3.5.min.js"></script>
+		<script type="text/javascript" src="js/filesaver.js"></script>
+<script type="text/javascript" src="js/sheets.js"></script>
+<script type="text/javascript" src="js/e2e2.js"></script>
+<script type="text/javascript" src="js/core.js"></script>
+		<title>reportZone</title>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-60910957-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+		
+<style>   
+
+
+.msgBox {
+  position:absolute;
+  padding:10px;
+  left:25px;
+  top:75px;
+  
+
+}
+
+
+#dropZone {
+height:200px;
+    width:100%;
+    border-radius:7px;
+    border:1px solid black;
+   background: white; /* Old browsers */
+   color:black;
+}
+
+.pClass { position:relative;
+top:20px;
+left:45%;
+width:200px;
+font-weight:bold;
+font-size:26px;
+color:black;
+
+}
+
+#spinner {
+  position:relative;
+top:20px;
+left:45%;
+
+}
+
+.over {
+
+    border:2px dashed black!important;
+}
+
+.navbar{ 
+    background-image: none;
+
+border:none;
+
+
+}
+
+.nav li {
+    display:table-cell !important;
+}
+
+
+
+
+.navbar-custom {
+ background-color: #1E4A6D;
+    border-radius:0;
+
+    /* background-color:#F1F1F1 ;
+
+    color:black;       */
+}
+
+.navbar-custom .navbar-nav > li > a {
+    color:#fff;
+}
+.navbar-custom .navbar-nav > .active > a, .navbar-nav > .active > a:hover, .navbar-nav > .active > a:focus {
+    color: #ffffff;
+    background-color:transparent;
+}
+.navbar-custom .navbar-brand {
+    color:white;
+}
+
+
+</style></head>
+	<body class="test">
+	<nav class="navbar navbar-default navbar-custom" role="navigation">
+   <div class="navbar-header">
+   </div>
+   <div>
+      <ul class="nav navbar-nav pull-right" style="margin-right:20px">
+      	<li><a href="#" id="reset" class="">Reset</a></li>
+        <li><a href="#" id="config2" class="config">Config</a></li>
+         
+         <noscript>
+         <li><a href="#" id="login" data-toggle="modal" data-target="#myModal">Login</a></li></noscript>
+         
+        
+      </ul>
+   </div>
+</nav>
+
+<div class="container">
+<div class="msgBox"></div>
+<div id="dropZone"><span id="spinner"><img width="100" class="spinner" src="img/newIcon.jpg"></span><br><p class="pClass"><img width="75" style="margin-left:20px" src="img/newLogo.png"><br>reportZone</p></div><br>
+</div>
+<div id="dataHolder"></div>
+<div style="display:block">
+	<div class="container">
+<table class="table table-bordered" id="resultsHolder" style="width:100%"></table><table class="table" id="errHolder"></table></div>
+</div></div>
+
+<div id="rawErrorData" style="display:none"></div>
+
+<div class="modal fade" id="config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        <h4 class="modal-title" id="myModalLabel">Configure DropZone</h4>
+      </div> <!-- /.modal-header -->
+
+      <div class="modal-body">
+        <form role="form">
+          <div class="form-group">
+            <div class="input-group">
+              <input type="text" class="form-control" id="uLogin" value="demo" placeholder="Login">
+              <label for="uLogin" class="input-group-addon glyphicon glyphicon-user"></label>
+            </div>
+          </div> <!-- /.form-group -->
+
+          <div class="form-group">
+            <div class="input-group">
+              <input type="password" value="demo" class="form-control" id="uPassword" placeholder="Password">
+              <label for="uPassword" class="input-group-addon glyphicon glyphicon-lock"></label>
+            </div> <!-- /.input-group -->
+          </div> <!-- /.form-group -->
+          <div class="form-group">
+            <div class="input-group">
+              <input type="text" class="form-control" value="demo.steltix.com" id="url" placeholder="E1 Url">
+              <label for="url" class="input-group-addon glyphicon glyphicon-check"></label>
+            </div> <!-- /.input-group -->
+          </div> <!-- /.form-group -->
+
+        </form>
+
+      </div> <!-- /.modal-body -->
+
+      <div class="modal-footer">
+        <button id="configBtn" class="form-control btn btn-primary">Ok</button>
+
+        <div class="progress">
+          <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="100" style="width: 0%;">
+            <span class="sr-only">progress</span>
+          </div>
+        </div>
+      </div> <!-- /.modal-footer -->
+
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+
+
+
+
+
+
+
+
+<table id="excelCols" style="display:none"></table>
+</body>
+</html>
